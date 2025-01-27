@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
@@ -7,6 +8,9 @@ from massmail.settings import *     # NOQA
 from common.settings import *       # NOQA
 from tasks.settings import *        # NOQA
 from voip.settings import *         # NOQA
+
+from dotenv import load_dotenv
+load_dotenv()
 
 # ---- Django settings ---- #
 
@@ -18,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # To get new value of key use code:
 # from django.core.management.utils import get_random_secret_key
 # print(get_random_secret_key())
-SECRET_KEY = 'j1c=6$s-dh#$ywt@(q4cm=j&0c*!0x!e-qm6k1%yoliec(15tn'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Add your hosts to the list.
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -26,31 +30,26 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 # Database
 DATABASES = {
     'default': {
-        # for MySQl
-        'ENGINE': 'django.db.backends.mysql',
-        'PORT': '3306',
+        "ENGINE": "django.db.backends.postgresql",
+        'PORT': '5432',   # for PostgreSQL
 
-        # for PostgreSQL
-        # "ENGINE": "django.db.backends.postgresql",
-        # 'PORT': '5432',   # for PostgreSQL
-
-        'NAME': 'crm_db',
-        'USER': 'crm_user',
-        'PASSWORD': 'crmpass',
-        'HOST': 'localhost',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST': os.getenv('DB_HOST'),
     }
 }
 
-EMAIL_HOST = '<specify host>'   # 'smtp.example.com'
+EMAIL_HOST = os.getenv('EMAIL_HOST')  # 'smtp.example.com'
 EMAIL_HOST_PASSWORD = '<specify password>'
-EMAIL_HOST_USER = 'crm@example.com'
+EMAIL_HOST_USER = os.getenv('EMAIL_ADDRESS')
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = 'CRM: '
 EMAIL_USE_TLS = True
 SERVER_EMAIL = 'crm@example.com'
 DEFAULT_FROM_EMAIL = 'crm@example.com'
 
-ADMINS = [("<Admin1>", "<admin1_box@example.com>")]   # specify admin
+ADMINS = [("davidmckim@gmail.com", "dmckim@fulcrumdev.com")]   # specify admin
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
